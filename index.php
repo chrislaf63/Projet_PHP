@@ -2,6 +2,8 @@
 
     $firstname = $name = $email = $phone = $message = "";
     $firstnameError = $nameError = $emailError = $phoneError = $messageError = "";
+    $isSuccess = false;
+    $emailTo = "lafarge.christophe@free.fr";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $firstname = verifyInput($_POST["firstname"]);
@@ -9,27 +11,45 @@
         $email = verifyInput($_POST["email"]);
         $phone = verifyInput($_POST["phone"]);
         $message = verifyInput($_POST["message"]);
+        $isSuccess = true;
+        $emailText = "";
 
             if(empty($firstname)) {
                 $firstnameError = "Je veux connaitre ton prénom !";
-            }
+                $isSuccess = false;
+            } else 
+                $emailText .="FirstName : $firstname\n";
             
             if(empty($name)) {
                 $nameError = "Et oui, je veux tout savoir, même ton nom !";
-            }
-
-            if(empty($message)) {
-                $messageError = "Qu'est-ce que tu veux me dire ?";
-            }
+                $isSuccess = false;
+            } else
+                $emailText .="Name : $name\n";
             
             if(!isEmail($email)) {
                 $emailError = "T'essaies de me rouler, ce n'est pas un email ça !";
-            }
+                $isSuccess = false;
+            } else
+                $emailText .="Email : $email\n";
 
             if(!isPhone($phone)) {
                 $phoneError = "Que des chiffres et des espaces SVP";
+                $isSuccess = false;
+            } else 
+                $emailText .="Phone : $phone\n";
+
+            if(empty($message)) {
+                $messageError = "Qu'est-ce que tu veux me dire ?";
+                $isSuccess = false;
+            } else 
+                $emailText .="Messagee : $message\n";
+
+            if($isSuccess) {
+                $headers = "From: $firstname $name <$email>\r\nReply-To: $email";
+                mail($emailTo, "Un message de votre site", $emailText , $headers);
+                $firstname = $name = $email = $phone = $message = "";
             }
-        }
+    }
         
         function isPhone($var) {
             return preg_match("/^[0-9 ]*$/", $var);
@@ -110,7 +130,7 @@
                             </div>
                         </div>
 
-                        <p class="thank-you">Votre message a bien été envoyé. Merci de m'avoir contacté :)</p>
+                        <p class="thank-you" style="display:<?php if($isSuccess) echo 'block'; else echo 'none';?>">Votre message a bien été envoyé. Merci de m'avoir contacté :)</p>
                     </form>
                 </div>
             </div>
