@@ -1,6 +1,6 @@
 <?php
 
-    $array = array("firstname" => "", "name" => "", "email" => "", "phone" => "", "message" => "", "firstnameError" => "", "nameError" => "", "emailError" => "", "phoneError" => "", "messageError" => "", "$isSuccess" => false)
+    $array = array("firstname" => "", "name" => "", "email" => "", "phone" => "", "message" => "", "firstnameError" => "", "nameError" => "", "emailError" => "", "phoneError" => "", "messageError" => "", "isSuccess" => false);
 
     $emailTo = "lafarge.christophe@free.fr";
 
@@ -17,34 +17,34 @@
                 $array["firstnameError"] = "Je veux connaitre ton prénom";
                 $array["isSuccess"] = false;
             } else 
-                $emailText .="FirstName: 1array["firstname"]\n";
+                $emailText .="FirstName: {$array["firstname"]}\n";
             
             if(empty($array["name"])) {
                 $array["nameError"] = "Et oui, je veux tout savoir, même ton nom !";
                 $array["isSuccess"] = false;
             } else
-                $emailText .="Name : 1array["name"]\n";
+                $emailText .="Name : {$array["name"]}\n";
             
             if(!isEmail($array["email"])) {
                 $array["emailError"] = "T'essaies de me rouler, ce n'est pas un email ça !";
                 $array["isSuccess"] = false;
             } else
-                $emailText .="Email : 1array["email"]\n";
+                $emailText .="Email : {$array["email"]}\n";
 
             if(!isPhone($array["phone"])) {
                 $array["phoneError"] = "Que des chiffres et des espaces SVP";
                 $array["isSuccess"] = false;
             } else 
-                $emailText .="Phone : 1array["phone"]\n";
+                $emailText .="Phone : {$array["phone"]}\n";
 
             if(empty($array["message"])) {
                 $array["messageError"] = "Qu'est-ce que tu veux me dire ?";
                 $array["isSuccess"] = false;
             } else 
-                $emailText .="Message : 1array["message"]\n";
+                $emailText .="Message : {$array["message"]}\n";
 
             if($array["isSuccess"]) {
-                $headers = "From: 1array["firstname"] 1array["name"] <1array["email"]>\r\nReply-To: 1array["email"]";
+                $headers = "From: {$array["firstname"]} {$array["name"]} <{$array["email"]}>\r\nReply-To: {$array["email"]}";
                 mail($emailTo, "Un message de votre site", $emailText , $headers);
             }
 
